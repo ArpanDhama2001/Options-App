@@ -1,0 +1,9 @@
+module.exports = {
+  sessionData: {
+    appId: "EW1LP8KAGZ-100",
+    redirectURL: "https://trade.fyers.in/api-login/redirect-uri/index.html",
+    secretKey: "79TLHP67JH",
+    accessToken:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIiwieDoyIl0sImF0X2hhc2giOiJnQUFBQUFCb05RcU10Ym1uTVRzU3NkTFA0WEZLZTBqZnZfWm5vSVdwMDRSUVE4SnhSOUp3dmdFSWpIcHdWNXVUUmJKb04tU2dzQkxzT05hVktYWEJ2a0RHRkt3LUozOEozMERDdkVSbGJuaW9vVndMcWs0TkpNWT0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiIyNGU0NzE1ODY4ZTk3OWMxNjAyYzE4MWI4OWMwMmZjZDg3YmUwYzQ0NWE2M2U3YTM1NzVhMzgwZCIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWUQxNDI2MSIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzQ4MzkyMjAwLCJpYXQiOjE3NDgzMDY1NzIsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc0ODMwNjU3Miwic3ViIjoiYWNjZXNzX3Rva2VuIn0.ILeb5gzokDsl8EDQEprKwY5vgy_b7RNJJ7sUbJFLpkE",
+  },
+};
