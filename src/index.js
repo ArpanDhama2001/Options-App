@@ -24,7 +24,6 @@ cron.schedule("* * * * *", async () => {
 });
 
 app.use("/api", apiRoutes);
-app.use("/options/api", apiRoutes);
 
 app.listen(ServerConfig.PORT, () => {
   console.log(`Server is listening on port ${ServerConfig.PORT}`);

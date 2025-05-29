@@ -17,6 +17,7 @@ module.exports = {
   strikeCounts: [5, 10, 15, 20, 25, 30],
   error_code: {
     NO_DATA: "NO_DATA",
+    NO_DELAYED_DATA: "NO_DELAYED_DATA",
     INVALID_SYMBOL: "INVALID_SYMBOL",
     API_ERROR: "API_ERROR",
     DATABASE_ERROR: "DATABASE_ERROR",
@@ -24,6 +25,7 @@ module.exports = {
   },
   error_messages: {
     NO_DATA: "No data available for the requested symbol.",
+    NO_DELAYED_DATA: "No delayed data available for the requested time.",
     INVALID_SYMBOL: "The provided symbol is invalid.",
     API_ERROR: "An error occurred while fetching data from the API.",
     DATABASE_ERROR: "An error occurred while accessing the database.",

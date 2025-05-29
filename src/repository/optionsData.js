@@ -32,11 +32,23 @@ const savePeriodicData = async () => {
 
 const getDelayedData = async (symbol, strikeCount, delayTime) => {
   try {
+    const fiveMinutesAgo = new Date(Date.now() - delayTime * 60 * 1000);
+    const startWindow = new Date(fiveMinutesAgo.getTime() - 5000); // 5 seconds before
+    const endWindow = new Date(fiveMinutesAgo.getTime() + 5000); // 5 seconds after
+
     const response = await OptionsData.findOne({
       symbol,
       strikeCount,
-      timestamp: { $lte: new Date(Date.now() - delayTime * 60 * 1000) },
+      timestamp: {
+        $gte: startWindow,
+        $lte: endWindow,
+      },
     }).sort({ timestamp: -1 });
+    if (!response) {
+      const err = new Error(error_messages.NO_DELAYED_DATA);
+      err.status = error_code.NO_DELAYED_DATA;
+      throw err;
+    }
     if (response.dummy) {
       const err = new Error(error_messages.NO_DATA);
       err.status = error_code.NO_DATA;
@@ -44,6 +56,13 @@ const getDelayedData = async (symbol, strikeCount, delayTime) => {
     }
     return response;
   } catch (error) {
+    if (error.status === error_code.NO_DELAYED_DATA) {
+      throw error; // rethrow to be handled by the caller
+    }
+    if (error.status === error_code.NO_DATA) {
+      throw error; // rethrow to be handled by the caller
+    }
+    // Log the error and throw a generic API error
     console.error("Error fetching delayed data:", error);
     throw new Error({
       status: error_code.API_ERROR,
