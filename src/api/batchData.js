@@ -1,4 +1,5 @@
 const { APIData } = require("../utils");
+const { GetVolume } = require("../utils/");
 const { fetchData } = require("./optionsData");
 
 const symbols = APIData.symbols;
@@ -19,12 +20,15 @@ async function fetchOptionsData() {
         fetchData(symbol, strikeCount)
           .then((response) => {
             // console.log(`${symbol}-${strikeCount}:`, response.callOi);
+            const volumes = GetVolume.getVolume(response.optionsChain);
             data.push({
               symbol: symbol,
               strikeCount: strikeCount,
               callOi: response.callOi,
               putOi: response.putOi,
-              optionsChain: response.optionsChain,
+              callVolume: volumes.call,
+              putVolume: volumes.put,
+              timestamp: Date.now(),
             });
           })
           .catch((error) => {
