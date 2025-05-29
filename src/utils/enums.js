@@ -15,4 +15,18 @@ module.exports = {
     "BSE:SENSEX-INDEX",
   ],
   strikeCounts: [5, 10, 15, 20, 25, 30],
+  error_code: {
+    NO_DATA: "NO_DATA",
+    INVALID_SYMBOL: "INVALID_SYMBOL",
+    API_ERROR: "API_ERROR",
+    DATABASE_ERROR: "DATABASE_ERROR",
+    UNKNOWN_ERROR: "UNKNOWN_ERROR",
+  },
+  error_messages: {
+    NO_DATA: "No data available for the requested symbol.",
+    INVALID_SYMBOL: "The provided symbol is invalid.",
+    API_ERROR: "An error occurred while fetching data from the API.",
+    DATABASE_ERROR: "An error occurred while accessing the database.",
+    UNKNOWN_ERROR: "An unknown error occurred.",
+  },
 };

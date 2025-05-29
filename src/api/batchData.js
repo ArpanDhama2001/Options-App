@@ -1,6 +1,7 @@
 const { APIData } = require("../utils");
 const { GetVolume } = require("../utils/");
 const { fetchData } = require("./optionsData");
+const { error_code, error_messages } = APIData;
 
 const symbols = APIData.symbols;
 const strikeCounts = APIData.strikeCounts;
@@ -19,6 +20,12 @@ async function fetchOptionsData() {
       tasks.push(() =>
         fetchData(symbol, strikeCount)
           .then((response) => {
+            if (!response) {
+              throw new Error({
+                status: error_code.API_ERROR,
+                message: error_messages.API_ERROR,
+              });
+            }
             // console.log(`${symbol}-${strikeCount}:`, response.callOi);
             const volumes = GetVolume.getVolume(response.optionsChain);
             data.push({
@@ -28,11 +35,11 @@ async function fetchOptionsData() {
               putOi: response.putOi,
               callVolume: volumes.call,
               putVolume: volumes.put,
-              timestamp: Date.now(),
+              dummy: false,
             });
           })
           .catch((error) => {
-            console.error(`Error for ${symbol} - ${strikeCount}:`, error);
+            // console.error(`Error for ${symbol} - ${strikeCount}:`, error);
           })
       );
     }

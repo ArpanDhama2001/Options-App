@@ -3,13 +3,12 @@ const { APIData } = require("../utils");
 
 const fetchData = async (symbol = "NSE:RELIANCE-EQ", strikeCount = 10) => {
   const { accessToken, appId, redirectURL } = APIData.sessionData;
-  console.log("API Call with symbol:", symbol, "and strikeCount:", strikeCount);
+  // console.log("API Call with symbol:", symbol, "and strikeCount:", strikeCount);
+  var fyers = new fyersModel();
+  fyers.setAppId(appId);
+  fyers.setRedirectUrl(redirectURL);
+  fyers.setAccessToken(accessToken);
   try {
-    var fyers = new fyersModel();
-    fyers.setAppId(appId);
-    fyers.setRedirectUrl(redirectURL);
-    fyers.setAccessToken(accessToken);
-
     const response = await fyers.getOptionChain({
       symbol: symbol,
       strikecount: strikeCount,
