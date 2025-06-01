@@ -32,9 +32,16 @@ const savePeriodicData = async () => {
 
 const getDelayedData = async (symbol, strikeCount, delayTime) => {
   try {
-    const fiveMinutesAgo = new Date(Date.now() - delayTime * 60 * 1000);
-    const startWindow = new Date(fiveMinutesAgo.getTime() - 5000); // 5 seconds before
-    const endWindow = new Date(fiveMinutesAgo.getTime() + 5000); // 5 seconds after
+    const now = new Date(); // Suppose it's 12:15:23
+
+    // Round down to the previous full minute
+    const currentMinute = new Date(now);
+    currentMinute.setSeconds(0, 0); // 12:15:00
+    const fiveMinutesAgo = new Date(
+      currentMinute.getTime() - (delayTime - 1) * 60 * 1000
+    );
+    const startWindow = new Date(fiveMinutesAgo.getTime() - 50000); // 5 seconds before
+    const endWindow = new Date(fiveMinutesAgo.getTime() + 50000); // 5 seconds after
 
     const response = await OptionsData.findOne({
       symbol,
@@ -71,7 +78,21 @@ const getDelayedData = async (symbol, strikeCount, delayTime) => {
   }
 };
 
+const deleteAll = async () => {
+  try {
+    await OptionsData.deleteMany({});
+    console.log("All options data deleted successfully");
+  } catch (error) {
+    console.error("Error deleting options data:", error);
+    throw new Error({
+      status: error_code.API_ERROR,
+      message: error_messages.API_ERROR,
+    });
+  }
+};
+
 module.exports = {
   savePeriodicData,
   getDelayedData,
+  deleteAll,
 };

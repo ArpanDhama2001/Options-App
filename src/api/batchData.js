@@ -1,4 +1,4 @@
-const { APIData } = require("../utils");
+const { APIData, GetChangeOI } = require("../utils");
 const { GetVolume } = require("../utils/");
 const { fetchData } = require("./optionsData");
 const { error_code, error_messages } = APIData;
@@ -28,11 +28,12 @@ async function fetchOptionsData() {
             }
             // console.log(`${symbol}-${strikeCount}:`, response.callOi);
             const volumes = GetVolume.getVolume(response.optionsChain);
+            const changeOI = GetChangeOI.getChangeOI(response.optionsChain);
             data.push({
               symbol: symbol,
               strikeCount: strikeCount,
-              callOi: response.callOi,
-              putOi: response.putOi,
+              callOi: changeOI.call,
+              putOi: changeOI.put,
               callVolume: volumes.call,
               putVolume: volumes.put,
               dummy: false,
@@ -66,7 +67,7 @@ async function fetchAndStoreOptionsData() {
 // Call the function and log the data length
 // (async () => {
 //   const response = await fetchAndStoreOptionsData();
-//   console.log("Response:", response.length);
+//   console.log("Response:", response[0]);
 // })();
 
 module.exports = { fetchAndStoreOptionsData }; // Export the function and data array

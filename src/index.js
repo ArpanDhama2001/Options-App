@@ -5,12 +5,14 @@ const apiRoutes = require("./routes");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cron = require("node-cron");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 
 // Connect to MongoDB
 const MONGO_URI = ServerConfig.MONGODB_URI;
