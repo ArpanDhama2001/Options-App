@@ -21,9 +21,11 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-cron.schedule("* * * * *", async () => {
-  await OptionsData.savePeriodicData();
-});
+// cron.schedule("* * * * *", async () => {
+// await OptionsData.savePeriodicData();
+// });
+
+// (async () => await OptionsData.savePeriodicData())();
 
 app.use("/api", apiRoutes);
 

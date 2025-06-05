@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { AccessTokenController } = require("../../controllers");
 
-router.post("/get-token", AccessTokenController.getAccessTokenController);
-router.get("/use-token", AccessTokenController.setAccessTokenController);
+router.post("/getToken", AccessTokenController.getAccessTokenController);
+router.get("/remainingTime", AccessTokenController.getRemainingTimeController);
 
 module.exports = router;

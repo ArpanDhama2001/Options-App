@@ -47,6 +47,12 @@ const updateAccessToken = async () => {
     if (!refreshToken) {
       throw new Error("Token Repo: Refresh token not found");
     }
+    const now = new Date();
+    if (now > token.refreshTokenExpiresAt) {
+      token.status = "expired";
+      await token.save();
+      throw new Error("Token Repo: Refresh token expired. Re-auth required.");
+    }
     const newAccessToken = await refreshAccessToken(refreshToken);
     if (!newAccessToken) {
       throw new Error("Token Repo: Failed to refresh access token");
@@ -85,9 +91,25 @@ const deleteTokens = async () => {
   }
 };
 
+const getRemainingTime = async () => {
+  try {
+    const token = await getTokens();
+    if (!token) {
+      throw new Error("Token Repo: No tokens found");
+    }
+    const now = new Date();
+    const remainingTime = token.refreshTokenExpiresAt - now;
+    return remainingTime > 0 ? remainingTime : 0;
+  } catch (error) {
+    console.error("Token Repo: Error getting remaining time:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   saveTokens,
   updateAccessToken,
   getTokens,
   deleteTokens,
+  getRemainingTime,
 };

@@ -6,6 +6,11 @@ const tokenSchema = new mongoose.Schema(
     refreshToken: String,
     accessTokenExpiresAt: Date,
     refreshTokenExpiresAt: Date,
+    status: {
+      type: String,
+      enum: ["active", "expired"],
+      default: "active",
+    },
   },
   { timestamps: true }
 );
