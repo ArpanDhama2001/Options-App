@@ -1,13 +1,15 @@
 const { StatusCodes } = require("http-status-codes");
 const { AccessTokenAPI } = require("../api");
+const { Token } = require("../repository");
 
 const getAccessTokenController = async (req, res) => {
   try {
     const { appID, secretKey, authCode } = req.body;
     if (!appID || !secretKey || !authCode) {
-      return res
-        .status(400)
-        .json({ error: "appID, secretKey, and authCode are required" });
+      return res.status(400).json({
+        error:
+          "AccessToken Controller: appID, secretKey, and authCode are required",
+      });
     }
     const token = await AccessTokenAPI.getAccessToken(
       appID,
@@ -15,31 +17,24 @@ const getAccessTokenController = async (req, res) => {
       authCode
     );
     if (!token || !token.access_token || !token.refresh_token) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ error: "Invalid appID, secretKey, or authCode" });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        error: "AccessToken Controller: Invalid appID, secretKey, or authCode",
+      });
     }
-    res.cookie("access_token", token.access_token, {
-      httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "Strict", // Helps prevent CSRF attacks
-      maxAge: 8 * 60 * 60 * 1000, // Cookie expiration time (8 hours)
-    });
-    res.cookie("refresh_token", token.refresh_token, {
-      httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "Strict", // Helps prevent CSRF attacks
-      maxAge: 8 * 60 * 60 * 1000, // Cookie expiration time (8 hours)
-    });
-    res.status(200).json({
-      message: "Token refreshed successfully",
+
+    // Save the tokens to the database
+    await Token.saveTokens(token.access_token, token.refresh_token);
+    return res.status(200).json({
+      message: "AccessToken Controller: Access token saved successfully",
       access_token: token.access_token,
+      refresh_token: token.refresh_token,
     });
   } catch (error) {
-    console.error("Error refreshing token:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to refresh token", error: error.message });
+    console.error("AccessToken Controller: Error refreshing token:", error);
+    res.status(500).json({
+      message: "AccessToken Controller: Failed to refresh token",
+      error: error.message,
+    });
   }
 };
 

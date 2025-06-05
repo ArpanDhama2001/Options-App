@@ -3,4 +3,5 @@ module.exports = {
   GetVolume: require("./getVolume"),
   GetChangeOI: require("./getChangeOI"),
   GenerateDummyData: require("./generateDummyData"),
+  RefreshAccessToken: require("../api/refreshAccessToken"),
 };
