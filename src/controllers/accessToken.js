@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const { AccessTokenAPI } = require("../api");
 const { TokensRepo } = require("../repository");
 
-const getAccessTokenController = async (req, res) => {
+const createAccessTokenController = async (req, res) => {
   try {
     const { appID, secretKey, authCode } = req.body;
     if (!appID || !secretKey || !authCode) {
@@ -38,6 +38,22 @@ const getAccessTokenController = async (req, res) => {
   }
 };
 
+const getAccessTokenController = async (req, res) => {
+  try {
+    const token = await TokensRepo.getTokens();
+    res.status(200).json({
+      message: "AccessToken Controller: Access token fetched successfully",
+      access_token: token.accessToken,
+    });
+  } catch (error) {
+    console.error("AccessToken Controller: Error getting access token:", error);
+    res.status(500).json({
+      message: "AccessToken Controller: Failed to get access token",
+      error: error.message,
+    });
+  }
+};
+
 const getRemainingTimeController = async (req, res) => {
   try {
     const timeLeft = await TokensRepo.getRemainingTime();
@@ -58,6 +74,7 @@ const getRemainingTimeController = async (req, res) => {
 };
 
 module.exports = {
+  createAccessTokenController,
   getAccessTokenController,
   getRemainingTimeController,
 };
