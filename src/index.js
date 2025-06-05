@@ -21,12 +21,12 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// cron.schedule("* * * * *", async () => {
-// await OptionsData.savePeriodicData();
-// });
+cron.schedule("* 9-15 * * 1-5", async () => {
+  await OptionsData.savePeriodicData();
+});
 
 cron.schedule(
-  `0 */${ServerConfig.ACCESS_TOKEN_EXPIRE_TIME} * * *`,
+  `0 8,8+${ServerConfig.ACCESS_TOKEN_EXPIRE_TIME} * * 1-5`,
   async () => {
     try {
       await TokensRepo.updateAccessToken();
