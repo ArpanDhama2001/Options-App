@@ -1,8 +1,12 @@
-const { StatusCodes } = require("http-status-codes");
-const { RefreshAccessToken } = require("../utils");
+const { TokensRepo } = require("../repository");
 
-const getRefreshTokenController = async (req, res) => {
-  // get access token from the db and pass to RefreshAccessToken.refresshAccessToken(accessToken);
+const updateAccessTokenController = async (req, res) => {
+  try {
+    const response = await TokensRepo.updateAccessToken();
+    return res.status(200).json({ access_token: response });
+  } catch (error) {
+    throw error;
+  }
 };
 
-module.exports = { getRefreshTokenController };
+module.exports = { updateAccessTokenController };

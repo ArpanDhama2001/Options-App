@@ -1,4 +1,4 @@
-const { refreshAccessToken } = require("../api/refreshAccessToken");
+const { RefreshAccessTokenAPI } = require("../api");
 const Token = require("../models/tokens");
 const { ServerConfig } = require("../config");
 
@@ -23,10 +23,10 @@ const saveTokens = async (accessToken, refreshToken) => {
 
     if (existingToken) {
       // Update the existing token
-      existingToken.accessToken = accessToken;
-      existingToken.refreshToken = refreshToken;
-      existingToken.accessTokenExpiresAt = accessTokenExpiresAt;
-      existingToken.refreshTokenExpiresAt = refreshTokenExpiresAt;
+      existingToken.accessToken = tokenData.accessToken;
+      existingToken.refreshToken = tokenData.refreshToken;
+      existingToken.accessTokenExpiresAt = tokenData.accessTokenExpiresAt;
+      existingToken.refreshTokenExpiresAt = tokenData.refreshTokenExpiresAt;
       await existingToken.save();
     } else {
       // Create a new token
@@ -34,6 +34,7 @@ const saveTokens = async (accessToken, refreshToken) => {
     }
 
     console.log("Token Repo: Tokens saved successfully");
+    return tokenData;
   } catch (error) {
     console.error("Token Repo: Error saving tokens:", error);
     throw error;
@@ -53,7 +54,9 @@ const updateAccessToken = async () => {
       await token.save();
       throw new Error("Token Repo: Refresh token expired. Re-auth required.");
     }
-    const newAccessToken = await refreshAccessToken(refreshToken);
+    const newAccessToken = await RefreshAccessTokenAPI.refreshAccessToken(
+      refreshToken
+    );
     if (!newAccessToken) {
       throw new Error("Token Repo: Failed to refresh access token");
     }
@@ -62,7 +65,7 @@ const updateAccessToken = async () => {
       Date.now() + ServerConfig.ACCESS_TOKEN_EXPIRE_TIME * 60 * 60 * 1000
     );
     await token.save();
-    console.log("Token Repo: Access token updated successfully");
+    return token;
   } catch (error) {
     console.error("Token Repo: Error updating access token:", error);
     throw error;

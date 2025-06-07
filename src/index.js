@@ -24,9 +24,11 @@ mongoose
 cron.schedule("* 9-15 * * 1-5", async () => {
   await OptionsData.savePeriodicData();
 });
+// (async () => await TokensRepo.updateAccessToken())();
+// (async () => await OptionsData.savePeriodicData())();
 
 cron.schedule(
-  `0 8,8+${ServerConfig.ACCESS_TOKEN_EXPIRE_TIME} * * 1-5`,
+  `0 */${ServerConfig.ACCESS_TOKEN_EXPIRE_TIME} * * *`,
   async () => {
     try {
       await TokensRepo.updateAccessToken();

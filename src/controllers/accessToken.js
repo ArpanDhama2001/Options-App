@@ -23,17 +23,26 @@ const createAccessTokenController = async (req, res) => {
     }
 
     // Save the tokens to the database
-    await TokensRepo.saveTokens(token.access_token, token.refresh_token);
+    const savedToken = await TokensRepo.saveTokens(
+      token.access_token,
+      token.refresh_token
+    );
+    // console.log("SavedToken:", savedToken);
     return res.status(200).json({
       message: "AccessToken Controller: Access token saved successfully",
       access_token: token.access_token,
       refresh_token: token.refresh_token,
+      access_token_expiry: savedToken?.accessTokenExpiresAt,
+      refresh_token_expiry: savedToken?.refreshTokenExpiresAt,
     });
   } catch (error) {
-    console.error("AccessToken Controller: Error refreshing token:", error);
+    console.error(
+      "AccessToken Controller: Error creating acesss token:",
+      error
+    );
     res.status(500).json({
-      message: "AccessToken Controller: Failed to refresh token",
-      error: error.message,
+      message: "AccessToken Controller: Failed to create acess token",
+      error: error,
     });
   }
 };
