@@ -50,9 +50,13 @@ const createAccessTokenController = async (req, res) => {
 const getAccessTokenController = async (req, res) => {
   try {
     const token = await TokensRepo.getTokens();
+    console.log("Get Token Controller: token:", token);
     res.status(200).json({
       message: "AccessToken Controller: Access token fetched successfully",
       access_token: token.accessToken,
+      refresh_token: token.refreshToken,
+      access_token_expiry: token.accessTokenExpiresAt,
+      refresh_token_expiry: token.refreshTokenExpiresAt,
     });
   } catch (error) {
     console.error("AccessToken Controller: Error getting access token:", error);
